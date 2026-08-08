@@ -1,0 +1,33 @@
+node_modules/
+
+## Build outputs and binaries
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+## IDE and Editor specific configurations
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+!.vscode/extensions.json
+
+## User-specific app settings and local secrets
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/launchSettings.json
+
+## Packages and dependencies
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+
+## Operating system system files
+Thumbs.db
+Desktop.ini
+.DS_Store
