@@ -17,12 +17,12 @@ namespace HRMSApplication.Controllers
             this.auth = authService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("token")]
-        public IActionResult Token(string user) {
+        public IActionResult Token(User user) {
             try
             {
-                string token = auth.GenerateToken(user);
+                string token = auth.GenerateToken(user.UserName+"HRMS");
                 return Ok(token);
 
             }
@@ -31,14 +31,15 @@ namespace HRMSApplication.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
-        public IActionResult userExists(string id)
+        public async Task<IActionResult> emailExists(string email)
         {
             try
             {
-                var itm = Request.Headers.Authorization;
-                return Ok(userService.UserExists(id));
+                //var itm = Request.Headers.Authorization;
+                var itm = await userService.EmailExists(email);
+                if (itm != null) return Ok(new { result = "Success", value = itm });
+                return Unauthorized(new { result = "Error", value = "Invalid Email" });
             }
             catch (Exception ex)
             {
@@ -62,10 +63,14 @@ namespace HRMSApplication.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [Route("login")]
-        public IActionResult login() {
-            return Ok("Hello world");
+        public async Task<IActionResult> login(User user) {
+            if (await userService.UserExists(user.UserName,user.Password) == true)
+            {
+                string token = auth.GenerateToken(user.UserName);
+                return Ok(new { result="Success",value=token });
+            }
+            return Unauthorized(new { result = "Error", value = "Invalid username or password" });
         }
     }
 }

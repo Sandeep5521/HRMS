@@ -25,8 +25,9 @@ namespace HRMSApplication.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> Get(string username)
+        public async Task<User?> Get(string username = null,string email = null)
         {
+            if(email != null) return _dbContext.Users.Where(x=>x.Email == email).FirstOrDefault();
             return _dbContext.Users.Where(x => x.UserName == username).FirstOrDefault();
         }
 
