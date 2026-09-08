@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Login from "./components/Login";
 import ForgotPassword from "./components/ForgetPassword";
+import Register from "./components/Register";
 
 function App() {
   const [Page, setPage] = useState("login"); // State to manage the current page (login or register)
@@ -8,8 +9,12 @@ function App() {
   const PageLoad = () => {
     if (Page === "login") return <Login onForgetPassword={() => {
       setPage('forgotPassword');
+    }} onRegister={() => {
+      setPage('register');
     }} />; // Render Login component if Page state is "login"
-    //else if (Page === "register") return <Register />;
+    else if (Page === "register") return <Register onBack={() => {
+      setPage('login');
+    }} />;
     else if (Page === "forgotPassword") return <ForgotPassword onBack={()=>{
       setPage('login');
     }} />; // Render ForgotPassword component if Page state is "forgotPassword"

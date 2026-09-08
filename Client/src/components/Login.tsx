@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
-interface ForgotPasswordProps {
+interface LoginProps {
   onForgetPassword: () => void;
+  onRegister: () => void;
 }
 
-const Login = ({ onForgetPassword }: ForgotPasswordProps) => {
+const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
     const [User, setUser] = useState('');
@@ -176,6 +177,20 @@ const Login = ({ onForgetPassword }: ForgotPasswordProps) => {
             <p className="mt-8 text-center text-sm text-gray-500">
                 © {new Date().getFullYear()} HRMS. All rights reserved.
             </p>
+            
+            <div className="mt-6 text-center">
+                <span className="text-sm text-gray-500">
+                  Don't have an account?
+                </span>
+
+                <button
+                  type="button"
+                  onClick={onRegister}
+                  className="ml-2 text-sm font-semibold text-blue-600 hover:text-blue-700 cursor-pointer"
+                >
+                  Sign Up
+                </button>
+            </div>
 
         </div>
     )
