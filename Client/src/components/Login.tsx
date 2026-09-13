@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 interface LoginProps {
   onForgetPassword: () => void;
@@ -10,6 +10,7 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
     const [Password, setPassword] = useState('');
     const [User, setUser] = useState('');
     const [IsEmailInvalid, setIsEmailInvalid] = useState(false);
+    const passwordInputRef = useRef<HTMLInputElement | null>(null);
 
     const handleLoginSubmit = async () => {
         // Handle login logic here
@@ -90,7 +91,6 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
                     </label>
 
                     <input
-                        id="email"
                         type="email"
                         placeholder="Enter your email"
                         aria-invalid={IsEmailInvalid}
@@ -104,7 +104,7 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
                                 e.preventDefault(); // Prevent form submission on Enter key
                                 const emailExists = await handleEmailExists();
                                 if (emailExists) {
-                                    document.getElementById('password')?.focus();
+                                    passwordInputRef.current?.focus();
                                 }
                                 console.log('Email:', Email, 'Password:', Password, 'User:', User);
                             }
@@ -122,7 +122,7 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
                     </label>
 
                     <input
-                        id="password"
+                        ref={passwordInputRef}
                         type="password"
                         placeholder="Enter your password"
                         value={Password}
