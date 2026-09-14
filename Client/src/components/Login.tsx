@@ -100,7 +100,7 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
                     text-gray-800 outline-none transition
                     focus:border-blue-500 focus:ring-2 focus:ring-blue-100 aria-invalid:border-red-500 aria-invalid:text-red-600 autofill:shadow-[inset_0_0_0_1000px_#fff] autofill:text-gray-800"
                         onKeyDown={async (e) => {
-                            if (e.key === 'Enter') {
+                            if (e.key === 'Enter' || e.key === 'Tab') {
                                 e.preventDefault(); // Prevent form submission on Enter key
                                 const emailExists = await handleEmailExists();
                                 if (emailExists) {
