@@ -1,13 +1,42 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type RegisterProps = {
   onBack?: () => void;
 };
 
 const Register = ({ onBack }: RegisterProps) => {
+  const [User,setUser] = useState('');
+  const [Email,setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [IsUserInvalid, setIsUserInvalid] = useState(false);
   const EmailRef = useRef<HTMLInputElement>(null);
   const PasswordRef = useRef<HTMLInputElement>(null);
   const SubmitbtnRef = useRef<HTMLButtonElement>(null);
+
+  const handleUserExists = async (): Promise<boolean> => {
+        // Handle user exists logic here
+        console.log('Checking if user exists:', User);
+        try {
+            let response = await fetch(`https://localhost:7074/user?name=${User}`);
+            const data = await response.json();
+            if (data.value === true) {
+                console.log('User exists:', data);
+                alert('User exists!'); // Display success message
+                setIsUserInvalid(true); // Reset user invalid state
+                return false; // User exists
+            }
+            else {
+                console.error('User does not exist:', data);
+                setIsUserInvalid(false);
+                return true; // User does not exist
+            }
+        }
+        catch (error) {
+            console.error('User exists check failed:', error);
+            alert('Error occurred while checking user existence.'); // Display error message
+            return false;
+        }
+    };
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -32,14 +61,23 @@ const Register = ({ onBack }: RegisterProps) => {
 
             <input
               type="text"
+              onChange={(e)=>{
+                setUser(e.target.value);
+              }}
+              value={User}
               placeholder="Enter username"
+              aria-invalid={IsUserInvalid}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl
                          focus:outline-none focus:ring-2 focus:ring-blue-500
-                         focus:border-transparent transition autofill:shadow-[inset_0_0_0_1000px_#fff] autofill:text-gray-800"
-              onKeyDown={(e) => {
+                         focus:border-transparent transition autofill:shadow-[inset_0_0_0_1000px_#fff] autofill:text-gray-800 aria-invalid:border-red-500 aria-invalid:text-red-600"
+              onKeyDown={async (e) => {
                 if (e.key === 'Enter' || e.key === 'Tab') {
                   e.preventDefault(); // Prevent form submission on Enter key
-                  EmailRef.current?.focus();
+                  const userExists = await handleUserExists();
+                  if (userExists) {
+                    console.log('User does not exist, moving to email field');
+                    EmailRef.current?.focus();
+                  }
                 }}
               }
             />
@@ -54,6 +92,10 @@ const Register = ({ onBack }: RegisterProps) => {
             <input
               ref={EmailRef}
               type="email"
+              onChange={(e)=>{
+                setEmail(e.target.value);
+              }}
+              value={Email}
               placeholder="Enter email"
               className="w-full px-4 py-3 border border-gray-300 rounded-xl
                          focus:outline-none focus:ring-2 focus:ring-blue-500
@@ -75,6 +117,10 @@ const Register = ({ onBack }: RegisterProps) => {
 
             <input
               ref={PasswordRef}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              value={Password}
               type="password"
               placeholder="Enter password"
               className="w-full px-4 py-3 border border-gray-300 rounded-xl

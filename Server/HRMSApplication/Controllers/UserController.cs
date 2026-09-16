@@ -32,12 +32,18 @@ namespace HRMSApplication.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> emailExists(string email)
+        public async Task<IActionResult> emailExists(string? email,string? name)
         {
             try
             {
-                //var itm = Request.Headers.Authorization;
-                var itm = await userService.EmailExists(email);
+                if(email != null)
+                {
+                    var item = await userService.EmailExists(email);
+                    if (item != null) return Ok(new { result = "Success", value = item });
+                    return Unauthorized(new { result = "Error", value = "Invalid Email" });
+                }
+
+                var itm = await userService.UserExists(name);
                 if (itm != null) return Ok(new { result = "Success", value = itm });
                 return Unauthorized(new { result = "Error", value = "Invalid Email" });
             }
