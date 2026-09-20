@@ -21,7 +21,7 @@ function App() {
   }
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-white flex flex-col md:flex-row">
+    <div className="w-full h-full sm:h-screen overflow-hidden bg-white flex flex-col md:flex-row">
 
       {/* Left Section */}
       <div className="w-full md:w-1/2 bg-blue-600 px-8 py-12 md:px-12 flex flex-col justify-center text-white">

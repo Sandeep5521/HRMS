@@ -144,7 +144,7 @@ const Register = ({ onBack }: RegisterProps) => {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700
                        text-white font-semibold py-3 rounded-xl
-                       transition duration-300"
+                       transition duration-300 cursor-pointer"
           >
             Create Account
           </button>
@@ -153,7 +153,7 @@ const Register = ({ onBack }: RegisterProps) => {
         <div className="mt-6 text-center">
           <button
             onClick={onBack}
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer"
           >
             Back to Login
           </button>
