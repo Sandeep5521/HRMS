@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useRef, useState,useContext } from 'react'
+import { NotificationContext } from '../App';
 
 interface LoginProps {
   onForgetPassword: () => void;
@@ -11,6 +12,7 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
     const [User, setUser] = useState('');
     const [IsEmailInvalid, setIsEmailInvalid] = useState(false);
     const passwordInputRef = useRef<HTMLInputElement | null>(null);
+    const ShowNotification = useContext(NotificationContext);
 
     const handleLoginSubmit = async () => {
         // Handle login logic here
@@ -30,11 +32,12 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
             });
             response = await response.json();
             console.log('Login response:', response);
-            alert('Login successful!'); // Display success message
+            //alert('Login successful!'); // Display success message
+            ShowNotification({ show: true, message: "Login successful!", type: "success" }); // Show notification for login success
         }
         catch (error) {
             console.error('Login failed:', error);
-            alert('Login failed! Please check your credentials.'); // Display error message
+            ShowNotification({ show: true, message: "Login failed! Please check your credentials.", type: "error" }); // Show notification for login failure
         }
     }
 
@@ -53,14 +56,15 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
             }
             else {
                 console.error('Email does not exist:', data);
-                alert('Email does not exist!'); // Display error message
+                //alert('Email does not exist!'); // Display error message
                 setIsEmailInvalid(true);
+                //ShowNotification({ show: true, message: "Email does not exist!", type: "error" }); // Show notification for email not existing
                 return false; // Email does not exist
             }
         }
         catch (error) {
             console.error('Email exists check failed:', error);
-            alert('Error occurred while checking email existence.'); // Display error message
+            ShowNotification({ show: true, message: "Error occurred while checking email existence.", type: "error" }); // Show notification for error
             return false;
         }
     };

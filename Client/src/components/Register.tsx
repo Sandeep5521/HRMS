@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import { useRef, useState,useContext } from "react";
+import { NotificationContext } from "../App";
 
 type RegisterProps = {
   onBack?: () => void;
@@ -12,6 +13,7 @@ const Register = ({ onBack }: RegisterProps) => {
   const EmailRef = useRef<HTMLInputElement>(null);
   const PasswordRef = useRef<HTMLInputElement>(null);
   const SubmitbtnRef = useRef<HTMLButtonElement>(null);
+  const ShowNotification = useContext(NotificationContext);
 
   const handleUserExists = async (): Promise<boolean> => {
         // Handle user exists logic here
@@ -21,19 +23,21 @@ const Register = ({ onBack }: RegisterProps) => {
             const data = await response.json();
             if (data.value === true) {
                 console.log('User exists:', data);
-                alert('User exists!'); // Display success message
+                //alert('User exists!'); // Display success message
+                //ShowNotification({ show: true, message: "User exists!", type: "error" }); // Show notification for user existing
                 setIsUserInvalid(true); // Reset user invalid state
                 return false; // User exists
             }
             else {
                 console.error('User does not exist:', data);
+                ShowNotification({ show: true, message: "User does not exist!", type: "error" }); // Show notification for user not existing
                 setIsUserInvalid(false);
                 return true; // User does not exist
             }
         }
         catch (error) {
             console.error('User exists check failed:', error);
-            alert('Error occurred while checking user existence.'); // Display error message
+            ShowNotification({ show: true, message: "Error occurred while checking user existence.", type: "error" }); // Show notification for error
             return false;
         }
     };
