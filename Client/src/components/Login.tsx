@@ -114,6 +114,9 @@ const Login = ({ onForgetPassword, onRegister }: LoginProps) => {
                             }
                         }}
                     />
+                    <p className={`mt-1 h-2 text-sm ${IsEmailInvalid ? 'text-red-600' : 'text-gray-500 hidden'}`}>
+                        {IsEmailInvalid ? 'Email does not exist.' : ''}
+                    </p>
                 </div>
 
                 {/* Password */}
