@@ -1,5 +1,5 @@
-import { useRef, useState,useContext } from "react";
-import { NotificationContext } from "../App";
+import { useRef, useState } from "react";
+// import { NotificationContext } from "../App";
 
 type RegisterProps = {
   onBack?: () => void;
@@ -10,10 +10,11 @@ const Register = ({ onBack }: RegisterProps) => {
   const [Email,setEmail] = useState('');
   const [Password, setPassword] = useState('');
   const [IsUserInvalid, setIsUserInvalid] = useState(false);
+  const [IsUserInvalidMessage, setIsUserInvalidMessage] = useState('');
   const EmailRef = useRef<HTMLInputElement>(null);
   const PasswordRef = useRef<HTMLInputElement>(null);
   const SubmitbtnRef = useRef<HTMLButtonElement>(null);
-  const ShowNotification = useContext(NotificationContext);
+  // const ShowNotification = useContext(NotificationContext);
 
   const handleUserExists = async (): Promise<boolean> => {
         // Handle user exists logic here
@@ -26,18 +27,21 @@ const Register = ({ onBack }: RegisterProps) => {
                 //alert('User exists!'); // Display success message
                 //ShowNotification({ show: true, message: "User exists!", type: "error" }); // Show notification for user existing
                 setIsUserInvalid(true); // Reset user invalid state
+                setIsUserInvalidMessage('Username is already taken.');
                 return false; // User exists
             }
             else {
                 console.error('User does not exist:', data);
-                ShowNotification({ show: true, message: "User does not exist!", type: "error" }); // Show notification for user not existing
+                //ShowNotification({ show: true, message: "User does not exist!", type: "error" }); // Show notification for user not existing
                 setIsUserInvalid(false);
                 return true; // User does not exist
             }
         }
         catch (error) {
             console.error('User exists check failed:', error);
-            ShowNotification({ show: true, message: "Error occurred while checking user existence.", type: "error" }); // Show notification for error
+            //ShowNotification({ show: true, message: "Error occurred while checking user existence.", type: "error" }); // Show notification for error
+            setIsUserInvalid(true);
+            setIsUserInvalidMessage('Error occurred while checking user existence.');
             return false;
         }
     };
@@ -69,22 +73,29 @@ const Register = ({ onBack }: RegisterProps) => {
                 setUser(e.target.value);
               }}
               value={User}
+              pattern={"[^@]+"}
               placeholder="Enter username"
               aria-invalid={IsUserInvalid}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl
                          focus:outline-none focus:ring-2 focus:ring-blue-500
                          focus:border-transparent transition autofill:shadow-[inset_0_0_0_1000px_#fff] autofill:text-gray-800 aria-invalid:border-red-500 aria-invalid:text-red-600"
               onKeyDown={async (e) => {
+                if(e.key === '@' || e.key === ' ' || e.key === '.') {
+                  e.preventDefault(); // Prevent '@' and space characters
+                }
                 if (e.key === 'Enter' || e.key === 'Tab') {
                   e.preventDefault(); // Prevent form submission on Enter key
                   const userExists = await handleUserExists();
-                  if (userExists) {
-                    console.log('User does not exist, moving to email field');
-                    EmailRef.current?.focus();
-                  }
+                    if (userExists) {
+                      console.log('User does not exist, moving to email field');
+                      EmailRef.current?.focus();
+                    }
                 }}
               }
             />
+            <p className={`mt-1 h-2 text-sm ${IsUserInvalid ? 'text-red-600' : 'text-gray-500 hidden'}`}>
+                        {IsUserInvalid ? IsUserInvalidMessage : ''}
+                    </p>
           </div>
 
           {/* Email */}
