@@ -17,7 +17,7 @@ namespace HRMSApplication.Services
                     return user.UserName;
                 }
             }
-            return null;
+            return string.Empty;
         }
 
         public async Task OnLogin()

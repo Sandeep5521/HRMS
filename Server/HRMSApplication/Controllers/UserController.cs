@@ -39,8 +39,8 @@ namespace HRMSApplication.Controllers
                 if(email != null)
                 {
                     var item = await userService.EmailExists(email);
-                    if (item != null) return Ok(new { result = "Success", value = item });
-                    return Unauthorized(new { result = "Error", value = "Invalid Email" });
+                    if (item != string.Empty) return Ok(new { result = "Success", value = item });
+                    return Unauthorized(new { result = "Error", value = item });
                 }
 
                 var itm = await userService.UserExists(name);
@@ -54,14 +54,13 @@ namespace HRMSApplication.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [Route("register")]
         public IActionResult register(User user)
         {
             try
             {
                 userService.OnRegister(user);
-                return Ok();
+                return Ok(new {result="Success",value = true});
             }
             catch (Exception ex) {
                 return StatusCode(500, ex.Message);
